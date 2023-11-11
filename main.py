@@ -239,6 +239,25 @@ for i, params in enumerate(param_sets):
     print("Tiempo de ejecución :", elapsed_time, "segundos")
     print("--------------------------------------")
 
+    # === Arboles de decision ===
+
+    # Entrenar el clasificador de árboles de decisión
+    clf = DecisionTreeClassifier()
+    clf.fit(Xtrain,y_train)
+
+    # Realizar predicciones en el conjunto de prueba
+    predictions = clf.predict(Xtest)
+
+    # Evaluar el rendimiento del clasificador
+    accuracy = accuracy_score(y_test, predictions)
+    print(f'Precisión en el conjunto de prueba: {accuracy}')
+
+    # Mostrar el informe de clasificación
+    print('\nInforme de clasificación:')
+    print(classification_report(y_test, predictions))
+
+    # === ******************* ===
+
     # Calcular la matriz de confusión
     y_pred = modelo_rf.predict(Xtest)
     cm = confusion_matrix(y_test, y_pred)
