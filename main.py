@@ -52,8 +52,7 @@ def limpiar_tokenizar(lang, texto):
 
     return RefactorText
 
-df['texto_tokenizado'] = df.apply(
-    lambda x: limpiar_tokenizar(x[1]), axis=1)
+df['texto_tokenizado'] = df.apply(lambda x: limpiar_tokenizar(x[1]), axis=1)
 df.to_csv(
     'resultadoTokeniz.csv', index=False)
 
