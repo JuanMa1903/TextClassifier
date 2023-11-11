@@ -190,3 +190,20 @@ accuracy = accuracy_score(y_test_encoded, y_pred)
 print(f'Accuracy: {accuracy}')
 print(classification_report(y_test_encoded, y_pred))
 
+# Predicciones en el conjunto de entrenamiento
+y_train_pred = mlp_classifier.predict(X_train_tfidf)
+
+# Evaluar el rendimiento en el conjunto de entrenamiento
+train_accuracy = accuracy_score(y_train_encoded, y_train_pred)
+print(f'Accuracy en el conjunto de entrenamiento: {train_accuracy}')
+print('Reporte de clasificación en el conjunto de entrenamiento:')
+print(classification_report(y_train_encoded, y_train_pred))
+
+# Predicciones en el conjunto de prueba
+y_test_pred = mlp_classifier.predict(X_test_tfidf)
+
+# Evaluar el rendimiento en el conjunto de prueba
+test_accuracy = accuracy_score(y_test_encoded, y_test_pred)
+print(f'Accuracy en el conjunto de prueba: {test_accuracy}')
+print('Reporte de clasificación en el conjunto de prueba:')
+print(classification_report(y_test_encoded, y_test_pred))
