@@ -52,7 +52,7 @@ def limpiar_tokenizar(lang, texto):
 
     return RefactorText
 
-df['texto_tokenizado'] = df.apply(lambda x: limpiar_tokenizar(x[1]), axis=1)
+df['texto_tokenizado'] = df.apply(lambda x: limpiar_tokenizar(x['Lenguage'], x['Text']), axis=1)
 df.to_csv(
     'resultadoTokeniz.csv', index=False)
 
@@ -171,7 +171,7 @@ print("Dimensiones ", y_train.shape)
 # Número de árboles en el bosque aleatorio
 n_estimators = [int(x) for x in np.linspace(start=100, stop=150, num=3)]
 # Número de características a considerar en cada división
-max_features = ['auto', 'sqrt']
+max_features = ['sqrt', 'sqrt']
 # Número máximo de niveles en el árbol
 max_depth = [2, 4]
 # Número mínimo de muestras requeridas para dividir un nodo
@@ -208,7 +208,7 @@ print("Precisión de prueba:", "{:.3f}%".format(test_accuracy))
 
 param_sets = [
     {'n_estimators': 30, 'min_samples_split': 15,
-        'min_samples_leaf': 15, 'max_depth': 28, 'max_features': 'auto'},
+        'min_samples_leaf': 15, 'max_depth': 28, 'max_features': 'sqrt'},
 ]
 
 for i, params in enumerate(param_sets):
