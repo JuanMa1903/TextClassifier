@@ -1,0 +1,10 @@
+pandas
+seaborn
+matplotlib
+numpy
+unidecode
+nltk
+scikit-learn
+wordcloud
+
+pip install -r requirements.txt
