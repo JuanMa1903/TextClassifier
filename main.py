@@ -16,14 +16,18 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from scipy.spatial.distance import cosine
 from sklearn.metrics import confusion_matrix
+from tensorflow.keras.models import Sequential
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.layers import Embedding, LSTM, Dense
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import StandardScaler, LabelEncoder
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.metrics import accuracy_score, classification_report
 
 warnings.filterwarnings('ignore')

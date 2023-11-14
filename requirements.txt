@@ -1,7 +1,9 @@
 nltk
 numpy
+keras
 pandas
 seaborn
-scikit-learn
 unidecode
 matplotlib
+tensorflow
+scikit-learn
