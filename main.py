@@ -16,18 +16,14 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from scipy.spatial.distance import cosine
 from sklearn.metrics import confusion_matrix
-from tensorflow.keras.models import Sequential
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.layers import Embedding, LSTM, Dense
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.metrics import accuracy_score, classification_report
 
 warnings.filterwarnings('ignore')
@@ -165,7 +161,7 @@ test_accuracy = rf_Grid.score(Xtest, y_test) * 100
 print("Precisión del entrenamiento:", "{:.3f}%".format(train_accuracy))
 print("Precisión de prueba:", "{:.3f}%".format(test_accuracy))
 
-# Crear el modelo de Random Forest
+#! Crear el modelo de Random Forest
 modelo_rf = RandomForestClassifier(n_estimators=100, random_state=42)
 
 print("Dimensiones :", Xtrain.shape)
@@ -218,7 +214,7 @@ param_sets = [
 for i, params in enumerate(param_sets):
     start_time = time.time()  # Registrar el tiempo de inicio
 
-    # Crear una instancia del modelo RandomForestClassifier
+    #! Crear una instancia del modelo RandomForestClassifier
     modelo_rf = RandomForestClassifier(**params)
 
     # Entrenar el modelo con los parámetros actuales
@@ -243,11 +239,9 @@ for i, params in enumerate(param_sets):
     print("Tiempo de ejecución :", elapsed_time, "segundos")
     print("--------------------------------------")
 
-    # === Arboles de decision ===
-
-    # Entrenar el clasificador de árboles de decisión
+    #! Entrenar el clasificador de árboles de decisión
     clf = DecisionTreeClassifier()
-    clf.fit(Xtrain,y_train)
+    clf.fit(Xtrain, y_train)
 
     # Realizar predicciones en el conjunto de prueba
     predictions = clf.predict(Xtest)
@@ -260,11 +254,26 @@ for i, params in enumerate(param_sets):
     print('\nInforme de clasificación:')
     print(classification_report(y_test, predictions))
 
-    # === ******************* ===
-
     # Calcular la matriz de confusión
     y_pred = modelo_rf.predict(Xtest)
     cm = confusion_matrix(y_test, y_pred)
+
+    #! Crear el clasificador MLP
+    mlp_classifier = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42)
+
+    # Entrenar el modelo
+    mlp_classifier.fit(Xtrain, y_train)
+
+    # Realizar predicciones en el conjunto de prueba
+    y_pred = mlp_classifier.predict(Xtest)
+
+    # Evaluar el rendimiento del modelo
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f'Accuracy: {accuracy:.2f}')
+
+    # Mostrar el informe de clasificación
+    print('\nInforme de clasificación:')
+    print(classification_report(y_test, y_pred))
 
     labels = np.unique(y_test)
     df_cm = pd.DataFrame(cm, index=labels, columns=labels)
