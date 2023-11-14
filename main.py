@@ -16,14 +16,18 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from scipy.spatial.distance import cosine
 from sklearn.metrics import confusion_matrix
+from tensorflow.keras.models import Sequential
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.layers import Embedding, LSTM, Dense
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import StandardScaler, LabelEncoder
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.metrics import accuracy_score, classification_report
 
 warnings.filterwarnings('ignore')
@@ -52,8 +56,7 @@ def limpiar_tokenizar(lang, texto):
 
     return RefactorText
 
-df['texto_tokenizado'] = df.apply(
-    lambda x: limpiar_tokenizar(x[1]), axis=1)
+df['texto_tokenizado'] = df.apply(lambda x: limpiar_tokenizar(x['Lenguage'], x['Text']), axis=1)
 df.to_csv(
     'resultadoTokeniz.csv', index=False)
 
@@ -172,7 +175,7 @@ print("Dimensiones ", y_train.shape)
 # Número de árboles en el bosque aleatorio
 n_estimators = [int(x) for x in np.linspace(start=100, stop=150, num=3)]
 # Número de características a considerar en cada división
-max_features = ['auto', 'sqrt']
+max_features = ['sqrt', 'sqrt']
 # Número máximo de niveles en el árbol
 max_depth = [2, 4]
 # Número mínimo de muestras requeridas para dividir un nodo
@@ -209,7 +212,7 @@ print("Precisión de prueba:", "{:.3f}%".format(test_accuracy))
 
 param_sets = [
     {'n_estimators': 30, 'min_samples_split': 15,
-        'min_samples_leaf': 15, 'max_depth': 28, 'max_features': 'auto'},
+        'min_samples_leaf': 15, 'max_depth': 28, 'max_features': 'sqrt'},
 ]
 
 for i, params in enumerate(param_sets):
@@ -239,6 +242,25 @@ for i, params in enumerate(param_sets):
     print("Precisión de prueba:", "{:.2f}%".format(test_accuracy))
     print("Tiempo de ejecución :", elapsed_time, "segundos")
     print("--------------------------------------")
+
+    # === Arboles de decision ===
+
+    # Entrenar el clasificador de árboles de decisión
+    clf = DecisionTreeClassifier()
+    clf.fit(Xtrain,y_train)
+
+    # Realizar predicciones en el conjunto de prueba
+    predictions = clf.predict(Xtest)
+
+    # Evaluar el rendimiento del clasificador
+    accuracy = accuracy_score(y_test, predictions)
+    print(f'Precisión en el conjunto de prueba: {accuracy}')
+
+    # Mostrar el informe de clasificación
+    print('\nInforme de clasificación:')
+    print(classification_report(y_test, predictions))
+
+    # === ******************* ===
 
     # Calcular la matriz de confusión
     y_pred = modelo_rf.predict(Xtest)
